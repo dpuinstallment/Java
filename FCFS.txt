@@ -1,0 +1,63 @@
+import java.util.*;
+public class FCFS{
+public static void main(String args[]){
+Scanner sc = new Scanner(System.in);
+System.out.println("Enter no. of process : ");
+int n = sc.nextInt();
+int pid[] = new int[n]; //process ids
+int art[] = new int[n]; //arrival times
+int bt[] = new int[n]; //brust times
+int ft[] = new int[n]; //finish times
+int tat[] = new int[n]; //turn around times
+int wt[] = new int[n]; // waiting around times
+int temp;
+float avgtat = 0, avgwt = 0;
+for(int i = 0; i < n; i++){
+System.out.println("enter process "+ (i + 1) + " arrival time: ");
+art[i] = sc.nextInt();
+System.out.println("enter process "+ (i + 1) +" brust time: ");
+bt[i] = sc.nextInt();
+pid[i] = i + 1;
+}
+for(int i = 0; i < n; i++){ //sorting according to arrival times
+for(int j = 0; j < n - (i+1); j++){
+if(art[j] > art[j+1]){
+temp = art[j];
+art[j] = art[j+1];
+art[j+1] = temp;
+temp = bt[j];
+bt[j] = bt[j+1];
+bt[j+1] = temp;
+temp = pid[j];
+pid[j] = pid[j+1];
+pid[j+1] = temp;
+}
+}
+}
+for(int i = 0; i < n; i++){ //finding completion times
+if(i == 0){
+ft[i] = art[i] + bt[i];
+}
+else{
+if(art[i] > ft[i-1]){
+ft[i] = art[i] + bt[i];
+}
+else{
+ft[i] = ft[i-1] + bt[i];
+}
+}
+tat[i] = ft[i] - art[i];
+wt[i] = tat[i] - bt[i];
+avgtat += tat[i];
+avgwt += wt[i];
+}
+System.out.println("\nproid arrival brust complete turn waiting");
+for(int i = 0; i < n; i++){
+System.out.println(pid[i]+" \t " + art[i] + " \t " + bt[i] + " \t " + ft[i] + " \t " + tat[i] + " \t "
++ wt[i] + "\t");
+}
+sc.close();
+System.out.println("\naverage turn around time : "+ avgtat / n+ " \t");
+System.out.println("\naverage waiting time : "+ avgwt / n+ " \t");
+}
+}

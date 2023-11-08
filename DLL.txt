@@ -1,0 +1,84 @@
+Input
+Java File
+import java.io.*;
+import java.util.*;
+class B1
+{
+static
+{
+System.loadLibrary("B1");
+}
+private native int add(int a, int b);
+private native int sub(int a, int b);
+private native int mul(int a, int b);
+private native int div(int a, int b);
+private native int mod(int a, int b);
+public static void main(String[] args)
+{
+Scanner sc=new Scanner(System.in);
+int a, b,ch;
+System.out.println("\nEnter value of a : ");
+a = sc.nextInt();
+System.out.println("\nEnter value of b : ");
+b = sc.nextInt();
+do{
+System.out.println("\n Choice for opertaion : \n1.Addition \n2.Substraction \n3.Multipilcation
+\n4.Division \n5.Moduluo");
+System.out.println("\nENTER YOUR CHOICE : ");
+ch = sc.nextInt();
+switch(ch)
+{
+case 1 : new B1().add(a,b);
+break;
+case 2 : new B1().sub(a,b);
+break;
+case 3 : new B1().mul(a,b);
+break;
+case 4 : new B1().div(a,b);
+break;
+case 5 : new B1().mod(a,b);
+break;
+default : System.out.println("Your choice is wrong.");
+}
+}while(ch<6);
+}
+}
+C File
+#include <jni.h>
+#include <stdio.h>
+#include "B1.h"
+JNIEXPORT int JNICALL Java_B1_add(JNIEnv *env, jobject obj, jint a, jint b)
+{
+printf("\n%d + %d = %d\n",a,b,(a+b));
+}
+JNIEXPORT jint JNICALL Java_B1_sub(JNIEnv *env, jobject obj, jint a, jint b)
+{
+printf("\n%d - %d = %d\n",a,b,(a-b));
+}
+JNIEXPORT jint JNICALL Java_B1_mul(JNIEnv *env, jobject obj, jint a, jint b)
+{
+printf("\n%d * %d = %d\n",a,b,(a*b));
+}
+JNIEXPORT jint JNICALL Java_B1_div(JNIEnv *env, jobject obj, jint a , jint b)
+{
+printf("\n%d / %d = %d\n",a,b,(a/b));
+}
+JNIEXPORT jint JNICALL Java_B1_mod(JNIEnv *env, jobject obj, jint a , jint b)
+{
+printf("\n%d moduluo %d = %d\n",a,b,(a%b));
+}
+
+cmd
+Output
+ubuntu@ubuntu-Vostro-460:~$ javac B1.java
+ubuntu@ubuntu-Vostro-460:~$ ls
+B1.class demo Documents Music snap
+B1.h Desktop Downloads Pictures Templates
+B1.c B1.java DLL.odt eclipse-workspace Public Videos
+ubuntu@ubuntu-Vostro-460:~$ gcc -shared -fPIC -I/usr/lib/jvm/default-java/include
+-I/usr/lib/jvm/default-java/include/linux B1.c -o libB1.so
+ubuntu@ubuntu-Vostro-460:~$ ls
+B1.class demo Documents libB1.so Public Videos
+B1.h Desktop Downloads Music snap
+B1.c B1.java DLL.odt eclipse-workspace Pictures Templates
+ubuntu@ubuntu-Vostro-460:~$ java -classpath . -Djava.library.path=. B1
